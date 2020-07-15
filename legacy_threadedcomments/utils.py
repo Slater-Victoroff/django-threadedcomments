@@ -26,8 +26,5 @@ class XMLResponse(HttpResponse):
     A simple subclass of ``HttpResponse`` which makes serializing to XML easy.
     """
     def __init__(self, object, is_iterable = True):
-        if is_iterable:
-            content = serialize('xml', object)
-        else:
-            content = object
+        content = serialize('xml', object) if is_iterable else object
         super(XMLResponse, self).__init__(content, mimetype='application/xml')

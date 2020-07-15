@@ -69,10 +69,7 @@ class ThreadedCommentManager(models.Manager):
         ).select_related().order_by('date_submitted'))
         to_return = []
         if root:
-            if isinstance(root, int):
-                root_id = root
-            else:
-                root_id = root.id
+            root_id = root if isinstance(root, int) else root.id
             to_return = [c for c in children if c.id == root_id]
             if to_return:
                 to_return[0].depth = 0

@@ -75,10 +75,7 @@ def free_comment(request, content_type=None, object_id=None, edit_id=None, paren
         raise Http404 # Must specify either content_type and object_id or edit_id
     if "preview" in request.POST:
         return _preview(request, context_processors, extra_context, form_class=form_class)
-    if edit_id:
-        instance = get_object_or_404(model, id=edit_id)
-    else:
-        instance = None
+    instance = get_object_or_404(model, id=edit_id) if edit_id else None
     _adjust_max_comment_length(form_class)
     form = form_class(request.POST, instance=instance)
     if form.is_valid():
@@ -142,9 +139,7 @@ def can_delete_comment(comment, user):
     """
     if user.is_staff or user.is_superuser:
         return True
-    if hasattr(comment, 'user') and comment.user == user:
-        return True
-    return False
+    return bool(hasattr(comment, 'user') and comment.user == user)
 
 def comment_delete(request, object_id, model=ThreadedComment, extra_context = {}, context_processors = [], permission_callback=can_delete_comment):
     """

@@ -16,7 +16,7 @@ class CommentModerator(moderation.CommentModerator):
         c = comment.parent
         while c != None:
             c = c.parent
-            i = i + 1
+            i += 1
             if i > self.max_depth:
                 return True
         return False

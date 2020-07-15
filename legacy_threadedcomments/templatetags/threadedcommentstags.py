@@ -15,11 +15,10 @@ def get_contenttype_kwargs(content_object):
     """
     Gets the basic kwargs necessary for almost all of the following tags.
     """
-    kwargs = {
+    return {
         'content_type' : ContentType.objects.get_for_model(content_object).id,
         'object_id' : getattr(content_object, 'pk', getattr(content_object, 'id')),
     }
-    return kwargs
 
 def get_comment_url(content_object, parent=None):
     """
@@ -329,10 +328,7 @@ class ThreadedCommentFormNode(template.Node):
         self.context_name = context_name
         self.free = free
     def render(self, context):
-        if self.free:
-            form = FreeThreadedCommentForm()
-        else:
-            form = ThreadedCommentForm()
+        form = FreeThreadedCommentForm() if self.free else ThreadedCommentForm()
         context[self.context_name] = form
         return ''
 
